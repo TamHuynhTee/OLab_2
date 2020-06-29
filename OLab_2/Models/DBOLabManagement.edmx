@@ -1,0 +1,465 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DBOLabManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Job">
+          <Key>
+            <PropertyRef Name="MaCV" />
+          </Key>
+          <Property Name="MaCV" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="TenCV" Type="nchar" MaxLength="30" />
+          <Property Name="ThoiGian" Type="date" Nullable="false" />
+          <Property Name="HoanThanh" Type="bit" />
+          <Property Name="MaNQL" Type="char" MaxLength="6" />
+          <Property Name="MaDA" Type="char" MaxLength="6" />
+          <Property Name="NoiDung" Type="ntext" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MaTV" />
+          </Key>
+          <Property Name="MaTV" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="TenTV" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="NgaySinh" Type="date" Nullable="false" />
+          <Property Name="HocVan" Type="nchar" MaxLength="12" Nullable="false" />
+          <Property Name="MaDA" Type="char" MaxLength="6" />
+          <Property Name="LuongThuong" Type="money" />
+          <Property Name="ChucVu" Type="nchar" MaxLength="12" Nullable="false" />
+          <Property Name="MaCV" Type="char" MaxLength="6" />
+          <Property Name="GioiTinh" Type="nchar" MaxLength="10" />
+          <Property Name="Email" Type="char" MaxLength="30" />
+          <Property Name="Phone" Type="char" MaxLength="10" />
+          <Property Name="Password" Type="char" MaxLength="20" />
+          <Property Name="NoiDung" Type="ntext" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="MaDA" />
+          </Key>
+          <Property Name="MaDA" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="TenDA" Type="nchar" MaxLength="30" />
+          <Property Name="ThoiGian" Type="date" Nullable="false" />
+          <Property Name="TienDo" Type="float" />
+          <Property Name="MaNQL" Type="char" MaxLength="6" />
+          <Property Name="NoiDung" Type="ntext" />
+          <Property Name="HoanThanh" Type="bit" />
+        </EntityType>
+        <EntityType Name="SalaryLevel">
+          <Key>
+            <PropertyRef Name="HocVan" />
+          </Key>
+          <Property Name="HocVan" Type="nchar" MaxLength="12" Nullable="false" />
+          <Property Name="Luong" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SalaryPosition">
+          <Key>
+            <PropertyRef Name="ChucVu" />
+          </Key>
+          <Property Name="ChucVu" Type="nchar" MaxLength="12" Nullable="false" />
+          <Property Name="Luong" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_CongViec_DuAn">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="Job" Type="Self.Job" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="MaDA" />
+            </Principal>
+            <Dependent Role="Job">
+              <PropertyRef Name="MaDA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DuAn_ThanhVien">
+          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+          <End Role="Project" Type="Self.Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MaTV" />
+            </Principal>
+            <Dependent Role="Project">
+              <PropertyRef Name="MaNQL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanhVien_CongViec1">
+          <End Role="Job" Type="Self.Job" Multiplicity="0..1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Job">
+              <PropertyRef Name="MaCV" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="MaCV" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanhVien_DuAn">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="MaDA" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="MaDA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanhVien_LuongCV">
+          <End Role="SalaryPosition" Type="Self.SalaryPosition" Multiplicity="1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalaryPosition">
+              <PropertyRef Name="ChucVu" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="ChucVu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanhVien_LuongHV">
+          <End Role="SalaryLevel" Type="Self.SalaryLevel" Multiplicity="1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalaryLevel">
+              <PropertyRef Name="HocVan" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="HocVan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBOLabManagementModelStoreContainer">
+          <EntitySet Name="Job" EntityType="Self.Job" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalaryLevel" EntityType="Self.SalaryLevel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalaryPosition" EntityType="Self.SalaryPosition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CongViec_DuAn" Association="Self.FK_CongViec_DuAn">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Job" EntitySet="Job" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DuAn_ThanhVien" Association="Self.FK_DuAn_ThanhVien">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="Project" EntitySet="Project" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanhVien_CongViec1" Association="Self.FK_ThanhVien_CongViec1">
+            <End Role="Job" EntitySet="Job" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanhVien_DuAn" Association="Self.FK_ThanhVien_DuAn">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanhVien_LuongCV" Association="Self.FK_ThanhVien_LuongCV">
+            <End Role="SalaryPosition" EntitySet="SalaryPosition" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanhVien_LuongHV" Association="Self.FK_ThanhVien_LuongHV">
+            <End Role="SalaryLevel" EntitySet="SalaryLevel" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBOLabManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Job">
+          <Key>
+            <PropertyRef Name="MaCV" />
+          </Key>
+          <Property Name="MaCV" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TenCV" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="ThoiGian" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="HoanThanh" Type="Boolean" />
+          <Property Name="MaNQL" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="MaDA" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Project" Relationship="Self.FK_CongViec_DuAn" FromRole="Job" ToRole="Project" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_ThanhVien_CongViec1" FromRole="Job" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MaTV" />
+          </Key>
+          <Property Name="MaTV" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TenTV" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="NgaySinh" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="HocVan" Type="String" MaxLength="12" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="MaDA" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="LuongThuong" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ChucVu" Type="String" MaxLength="12" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="MaCV" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="GioiTinh" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Job" Relationship="Self.FK_ThanhVien_CongViec1" FromRole="Member" ToRole="Job" />
+          <NavigationProperty Name="Projects" Relationship="Self.FK_DuAn_ThanhVien" FromRole="Member" ToRole="Project" />
+          <NavigationProperty Name="Project" Relationship="Self.FK_ThanhVien_DuAn" FromRole="Member" ToRole="Project" />
+          <NavigationProperty Name="SalaryPosition" Relationship="Self.FK_ThanhVien_LuongCV" FromRole="Member" ToRole="SalaryPosition" />
+          <NavigationProperty Name="SalaryLevel" Relationship="Self.FK_ThanhVien_LuongHV" FromRole="Member" ToRole="SalaryLevel" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="MaDA" />
+          </Key>
+          <Property Name="MaDA" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TenDA" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="ThoiGian" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="TienDo" Type="Double" />
+          <Property Name="MaNQL" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Jobs" Relationship="Self.FK_CongViec_DuAn" FromRole="Project" ToRole="Job" />
+          <NavigationProperty Name="Member" Relationship="Self.FK_DuAn_ThanhVien" FromRole="Project" ToRole="Member" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_ThanhVien_DuAn" FromRole="Project" ToRole="Member" />
+          <Property Name="HoanThanh" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SalaryLevel">
+          <Key>
+            <PropertyRef Name="HocVan" />
+          </Key>
+          <Property Name="HocVan" Type="String" MaxLength="12" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Luong" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_ThanhVien_LuongHV" FromRole="SalaryLevel" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="SalaryPosition">
+          <Key>
+            <PropertyRef Name="ChucVu" />
+          </Key>
+          <Property Name="ChucVu" Type="String" MaxLength="12" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Luong" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_ThanhVien_LuongCV" FromRole="SalaryPosition" ToRole="Member" />
+        </EntityType>
+        <Association Name="FK_CongViec_DuAn">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="Job" Type="Self.Job" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="MaDA" />
+            </Principal>
+            <Dependent Role="Job">
+              <PropertyRef Name="MaDA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanhVien_CongViec1">
+          <End Role="Job" Type="Self.Job" Multiplicity="0..1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Job">
+              <PropertyRef Name="MaCV" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="MaCV" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DuAn_ThanhVien">
+          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+          <End Role="Project" Type="Self.Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MaTV" />
+            </Principal>
+            <Dependent Role="Project">
+              <PropertyRef Name="MaNQL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanhVien_DuAn">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="MaDA" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="MaDA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanhVien_LuongCV">
+          <End Role="SalaryPosition" Type="Self.SalaryPosition" Multiplicity="1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalaryPosition">
+              <PropertyRef Name="ChucVu" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="ChucVu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanhVien_LuongHV">
+          <End Role="SalaryLevel" Type="Self.SalaryLevel" Multiplicity="1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalaryLevel">
+              <PropertyRef Name="HocVan" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="HocVan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBOLabManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Jobs" EntityType="Self.Job" />
+          <EntitySet Name="Members" EntityType="Self.Member" />
+          <EntitySet Name="Projects" EntityType="Self.Project" />
+          <EntitySet Name="SalaryLevels" EntityType="Self.SalaryLevel" />
+          <EntitySet Name="SalaryPositions" EntityType="Self.SalaryPosition" />
+          <AssociationSet Name="FK_CongViec_DuAn" Association="Self.FK_CongViec_DuAn">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Job" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanhVien_CongViec1" Association="Self.FK_ThanhVien_CongViec1">
+            <End Role="Job" EntitySet="Jobs" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DuAn_ThanhVien" Association="Self.FK_DuAn_ThanhVien">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="Project" EntitySet="Projects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanhVien_DuAn" Association="Self.FK_ThanhVien_DuAn">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanhVien_LuongCV" Association="Self.FK_ThanhVien_LuongCV">
+            <End Role="SalaryPosition" EntitySet="SalaryPositions" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanhVien_LuongHV" Association="Self.FK_ThanhVien_LuongHV">
+            <End Role="SalaryLevel" EntitySet="SalaryLevels" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
+          <EntitySet Name="sysdiagrams" EntityType="DBOLabManagementModel.sysdiagram" />
+        </EntityContainer>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBOLabManagementModelStoreContainer" CdmEntityContainer="DBOLabManagementEntities">
+          <EntitySetMapping Name="Jobs">
+            <EntityTypeMapping TypeName="DBOLabManagementModel.Job">
+              <MappingFragment StoreEntitySet="Job">
+                <ScalarProperty Name="MaCV" ColumnName="MaCV" />
+                <ScalarProperty Name="TenCV" ColumnName="TenCV" />
+                <ScalarProperty Name="ThoiGian" ColumnName="ThoiGian" />
+                <ScalarProperty Name="HoanThanh" ColumnName="HoanThanh" />
+                <ScalarProperty Name="MaNQL" ColumnName="MaNQL" />
+                <ScalarProperty Name="MaDA" ColumnName="MaDA" />
+                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Members">
+            <EntityTypeMapping TypeName="DBOLabManagementModel.Member">
+              <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="MaTV" ColumnName="MaTV" />
+                <ScalarProperty Name="TenTV" ColumnName="TenTV" />
+                <ScalarProperty Name="NgaySinh" ColumnName="NgaySinh" />
+                <ScalarProperty Name="HocVan" ColumnName="HocVan" />
+                <ScalarProperty Name="MaDA" ColumnName="MaDA" />
+                <ScalarProperty Name="LuongThuong" ColumnName="LuongThuong" />
+                <ScalarProperty Name="ChucVu" ColumnName="ChucVu" />
+                <ScalarProperty Name="MaCV" ColumnName="MaCV" />
+                <ScalarProperty Name="GioiTinh" ColumnName="GioiTinh" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="DBOLabManagementModel.Project">
+              <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="HoanThanh" ColumnName="HoanThanh" />
+                <ScalarProperty Name="MaDA" ColumnName="MaDA" />
+                <ScalarProperty Name="TenDA" ColumnName="TenDA" />
+                <ScalarProperty Name="ThoiGian" ColumnName="ThoiGian" />
+                <ScalarProperty Name="TienDo" ColumnName="TienDo" />
+                <ScalarProperty Name="MaNQL" ColumnName="MaNQL" />
+                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalaryLevels">
+            <EntityTypeMapping TypeName="DBOLabManagementModel.SalaryLevel">
+              <MappingFragment StoreEntitySet="SalaryLevel">
+                <ScalarProperty Name="HocVan" ColumnName="HocVan" />
+                <ScalarProperty Name="Luong" ColumnName="Luong" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalaryPositions">
+            <EntityTypeMapping TypeName="DBOLabManagementModel.SalaryPosition">
+              <MappingFragment StoreEntitySet="SalaryPosition">
+                <ScalarProperty Name="ChucVu" ColumnName="ChucVu" />
+                <ScalarProperty Name="Luong" ColumnName="Luong" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="DBOLabManagementModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
